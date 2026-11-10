@@ -4,7 +4,7 @@
 
 Unlike traditional trackers that sync your personal data to remote servers, Daily Seeds prioritizes your privacy by keeping everything 100% local.
 
-## ✨ Features
+##  Features
 
 - **Privacy-First Design:** Your account and habit data live entirely on your device. Nothing is ever uploaded to a server, and no emails are sent.
 - **Visual Progress Tracking:** Track your consistency across the current week, month, or customized challenges.
@@ -12,13 +12,13 @@ Unlike traditional trackers that sync your personal data to remote servers, Dail
 - **Customization:** Built-in Dark Mode and beautiful, clean visual themes.
 - **Beautiful Typography:** Clean aesthetic powered by *Bricolage Grotesque*, *Figtree*, and *JetBrains Mono*.
 
-## 🛠️ How it Works
+##  How it Works
 
 Because data is kept strictly on your local device:
 - There is no password reset system. If you log out or clear your browser data without exporting, habits saved under that account remain securely locked on that device.
 - You can create multiple accounts on the same device to keep different habit profiles separate.
 
-## 🚀 How to Run Locally
+##  How to Run Locally
 
 Since this project runs entirely in the browser, you can run it without complex setups:
 
