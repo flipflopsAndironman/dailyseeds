@@ -39,3 +39,12 @@ All rights reserved. This source code is shared publicly for educational purpose
 
 ---
 
+---
+
+## ☕ Support Daily Seeds
+
+If Daily Seeds helps you grow your habits, there are a few ways you can support the project:
+
+- **⭐ Star this Repository:** Clicking the "Star" button at the top of this GitHub page is 100% free and helps boost the project's visibility!
+- **💬 Leave Feedback:** Open an issue in the **Issues** tab to tell me how the app is working for you or what features you'd like to see next.
+- **☕ Buy me a coffee (Coming Soon):**  I don't have a donation link set up just yet, but I will be adding a tipping option here in the future!
