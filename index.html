@@ -124,7 +124,37 @@ textarea.in { resize: vertical; min-height: 84px; }
 .field { display: flex; flex-direction: column; gap: 6px; }
 .err { color: var(--c4); font-size: 14px; margin: 0; }
 .note-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.note-nav { display: flex; align-items: center; gap: 8px; font-family: var(--font-num); font-size: 13px; }
+.note-date { display: flex; align-items: flex-end; gap: 8px 14px; flex-wrap: wrap; }
+.note-date .field { flex: 1 1 190px; min-width: 0; }
+.note-date input[type="date"] { min-height: 44px; font-family: var(--font-body); }
+.note-day { font-family: var(--font-display); font-weight: 500; font-size: 18px; }
+.level-foot { display: flex; justify-content: space-between; align-items: flex-start; gap: 4px 12px; flex-wrap: wrap; }
+.level-foot .level-sub { flex: 1 1 180px; min-width: 0; }
+.level-foot .linkbtn { white-space: nowrap; }
+.level-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.lv { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line); }
+.lv:first-child { border-top: 0; }
+.lv-n { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-content: center; font-family: var(--font-num); font-size: 14px; }
+.lv-main { min-width: 0; display: flex; flex-direction: column; }
+.lv-main b { font-family: var(--font-display); font-size: 17px; overflow-wrap: anywhere; }
+.lv-main span { color: var(--muted); font-size: 13px; font-family: var(--font-num); }
+.lv-st { font-size: 13px; color: var(--muted); text-align: right; }
+.lv.done .lv-n { background: var(--accent); border-color: var(--accent); color: var(--on-c); }
+.lv.cur { background: color-mix(in srgb, var(--accent) 10%, transparent); margin: 0 -8px; padding-left: 8px; padding-right: 8px; border-radius: 10px; border-top-color: transparent; }
+.lv.cur .lv-n { border: 2px solid var(--accent); font-weight: 600; }
+.lv.cur .lv-st { color: var(--accent); font-weight: 600; }
+.lv.top .lv-main b::after { content: "Top level"; margin-left: 8px; font-family: var(--font-num); font-weight: 500; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 2px 7px; vertical-align: middle; }
+.lv.endless .lv-n { border-style: dashed; color: var(--accent); }
+.problem { border: 1px solid var(--c4); border-style: solid; color: var(--c4); margin: 0 auto 12px; max-width: 640px; }
+.primary.attn { animation: pulse 1.4s ease-out 2; --hc: var(--accent); }
+.color-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.color-row .lbl { font-size: 14px; font-weight: 500; color: var(--muted); }
+.habit.fresh { animation: pulse 1.4s ease-out; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--hc, var(--accent)) 55%, transparent); } 100% { box-shadow: 0 0 0 14px color-mix(in srgb, var(--hc, var(--accent)) 0%, transparent); } }
+@media (prefers-reduced-motion: reduce) { .habit.fresh, .primary.attn { animation: none; } }
+.xp-rule { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
+.xp-rule:first-child { border-top: 0; }
+.xp-rule b { font-family: var(--font-num); font-weight: 500; white-space: nowrap; }
 .earlier { display: flex; flex-direction: column; }
 .earl { display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 2px; border: 0; border-top: 1px solid var(--line); background: none; padding: 8px 0; cursor: pointer; width: 100%; min-width: 0; }
 .earl span:last-child { color: var(--muted); font-size: 14px; overflow-wrap: anywhere; }
@@ -209,6 +239,18 @@ details.card > * + * { margin-top: 10px; }
 .hm.blank { border: 0; }
 .tip { text-align: center; color: var(--muted); font-size: 14px; }
 .tip a { color: var(--accent); font-weight: 600; }
+.ver .linkbtn { color: var(--muted); font-weight: 500; font-size: 13px; }
+.auth-ver { text-align: center; margin: 14px auto 0; font-family: var(--font-num); }
+.rel { padding: 12px 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; }
+.rel:first-child { border-top: 0; padding-top: 0; }
+.rel-head { display: flex; align-items: baseline; gap: 6px 10px; flex-wrap: wrap; }
+.rel-head b { font-family: var(--font-num); font-size: 16px; font-weight: 500; }
+.rel-date { color: var(--muted); font-size: 13px; margin-left: auto; }
+.rel-kind { font-family: var(--font-num); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; color: var(--muted); }
+.rel-kind.major { color: var(--c4); border-color: var(--c4); }
+.rel-kind.minor { color: var(--accent); border-color: var(--accent); }
+.rel-kind.fix { color: var(--c3); border-color: var(--c3); }
+.rel ul { margin: 0; padding-left: 18px; color: var(--muted); display: flex; flex-direction: column; gap: 2px; }
 
 .toolbar { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: -8px; }
 .who { flex: 1 1 100%; color: var(--muted); font-size: 14px; min-width: 0; overflow-wrap: anywhere; }
@@ -261,6 +303,25 @@ details.card > * + * { margin-top: 10px; }
 .primary:disabled { opacity: .6; cursor: default; }
 details.forgot summary { cursor: pointer; font-size: 14px; color: var(--muted); }
 details.forgot p { margin: 8px 0 0; }
+.manage { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.manage-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.danger { border: 1px solid var(--c4); color: var(--c4); background: transparent; border-radius: 10px; padding: 8px 12px; font-weight: 600; cursor: pointer; }
+.danger:disabled { opacity: .4; cursor: default; }
+.danger.sure { background: var(--c4); color: var(--on-c); }
+.selbox { width: 20px; height: 20px; accent-color: var(--accent); flex: none; margin: 0; }
+.habit-top .pick-name { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.habit.picked { border-color: var(--accent); }
+.empty b { display: block; font-family: var(--font-display); font-size: 18px; color: var(--ink); margin-bottom: 4px; }
+.ideas { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 12px; }
+.contacts { display: flex; flex-direction: column; gap: 10px; }
+.contact-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; flex-wrap: wrap; }
+.contact-row > div { min-width: 0; }
+.contact-val { font-weight: 600; overflow-wrap: anywhere; user-select: all; }
+a.ghost { display: inline-block; text-decoration: none; color: inherit; }
+.contact-row .btns { gap: 8px; }
+.contact-row .ghost { padding: 8px 12px; font-size: 14px; }
+a.ghost { display: inline-block; text-decoration: none; color: inherit; text-align: center; }
+#sampleNote .linkbtn { margin-left: 4px; }
 .wrap.enter > * { animation: rise .5s ease-out backwards; }
 .wrap.enter > :nth-child(2) { animation-delay: .05s; }
 .wrap.enter > :nth-child(6) { animation-delay: .1s; }
@@ -324,6 +385,8 @@ details.forgot p { margin: 8px 0 0; }
 }
 @media (prefers-reduced-motion: reduce) { .ring .bar, .xpbar i { transition: none; } }
 </style>
+
+<div class="note problem" id="problem" role="alert" hidden></div>
 
 <div class="splash" id="splash" hidden aria-hidden="true">
   <svg class="sp-art" viewBox="0 0 200 180" aria-hidden="true">
@@ -406,6 +469,7 @@ details.forgot p { margin: 8px 0 0; }
       <button class="linkbtn" id="guestBtn" type="button">Continue without an account</button>
     </div>
   </div>
+  <p class="fine auth-ver" id="authVersion"></p>
 </main>
 
 <div class="wrap" id="wrap" hidden>
@@ -444,6 +508,19 @@ details.forgot p { margin: 8px 0 0; }
     </div>
   </div>
 
+  <div class="sec page-panel" id="levelsPanel" hidden>
+    <button class="back" id="closeLevels" type="button"><span aria-hidden="true">&#8249;</span> Back</button>
+    <h2 class="page-title">Levels</h2>
+    <div class="card">
+      <p class="sub" id="levelsIntro"></p>
+      <ol class="level-list" id="levelList"></ol>
+    </div>
+    <div class="card">
+      <h3 class="h3">How to earn XP</h3>
+      <div id="xpRules"></div>
+    </div>
+  </div>
+
   <div class="sec page-panel" id="exportPanel" hidden>
     <button class="back" id="closeExport" type="button"><span aria-hidden="true">&#8249;</span> Back</button>
     <h2 class="page-title">Export to a spreadsheet</h2>
@@ -470,7 +547,10 @@ details.forgot p { margin: 8px 0 0; }
       <span class="level-xp" id="levelXp"></span>
     </div>
     <div class="xpbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-label="Progress to next level" id="xpTrack"><i id="xpFill" style="width:0%"></i></div>
-    <div class="level-sub" id="levelSub"></div>
+    <div class="level-foot">
+      <div class="level-sub" id="levelSub"></div>
+      <button class="linkbtn" id="levelsBtn" type="button" aria-expanded="false" aria-controls="levelsPanel">All levels</button>
+    </div>
     <div class="levelup" id="levelUp" aria-live="polite" hidden></div>
   </div>
 
@@ -489,22 +569,18 @@ details.forgot p { margin: 8px 0 0; }
     </div>
     <div style="text-align:center" id="thisWeekWrap" hidden><button class="thisweek" id="thisWeek" type="button">Back to this week</button></div>
 
-    <div class="note" id="sampleNote" hidden>These three habits are examples. Remove them or keep them, then add your own below.</div>
+    <div class="note" id="sampleNote" hidden>These habits are examples. <button class="linkbtn" id="removeSamples" type="button">Remove examples</button> and add your own below.</div>
+
+    <div class="manage" id="manageBar" hidden>
+      <button class="theme-btn" id="manageBtn" type="button" aria-pressed="false">Manage habits</button>
+      <div class="manage-tools" id="manageTools" hidden>
+        <label class="check"><input type="checkbox" id="selectAll"> Select all</label>
+        <button class="danger" id="removeSel" type="button" disabled>Remove selected (0)</button>
+        <button class="linkbtn" id="manageDone" type="button">Done</button>
+      </div>
+    </div>
 
     <ul class="habits" id="habits"></ul>
-
-    <div class="card" id="noteCard">
-      <div class="note-head">
-        <h2 class="h3">Daily note</h2>
-        <div class="note-nav">
-          <button class="nav sm" id="prevNote" type="button" aria-label="Previous day">&#8249;</button>
-          <span id="noteLabel"></span>
-          <button class="nav sm" id="nextNote" type="button" aria-label="Next day">&#8250;</button>
-        </div>
-      </div>
-      <textarea class="in" id="noteText" rows="3" placeholder="How did the day go? A line or two is enough (+5 XP)"></textarea>
-      <div class="earlier" id="earlier" hidden></div>
-    </div>
 
     <form class="add" id="addForm">
       <h2>Plant a new habit</h2>
@@ -512,16 +588,32 @@ details.forgot p { margin: 8px 0 0; }
         <input type="text" id="newName" maxlength="40" placeholder="e.g. Stretch for 10 minutes" aria-label="Habit name" autocomplete="off">
       </div>
       <div class="row">
-        <div class="swatches" role="radiogroup" aria-label="Colour">
+        <div class="color-row"><span class="lbl">Colour</span><div class="swatches" role="radiogroup" aria-label="Colour">
           <label><input type="radio" name="color" value="1" checked><span style="--sw:var(--c1)"></span></label>
           <label><input type="radio" name="color" value="2"><span style="--sw:var(--c2)"></span></label>
           <label><input type="radio" name="color" value="3"><span style="--sw:var(--c3)"></span></label>
           <label><input type="radio" name="color" value="4"><span style="--sw:var(--c4)"></span></label>
           <label><input type="radio" name="color" value="5"><span style="--sw:var(--c5)"></span></label>
-        </div>
-        <button class="primary" type="submit">Add habit</button>
+        </div></div>
+        <button class="primary" id="addBtn" type="submit">Add habit</button>
       </div>
+      <p class="err" id="addErr" role="alert" hidden>Type a habit name first, then tap Add habit.</p>
+      <p class="status" id="addStatus" role="status" aria-live="polite"></p>
     </form>
+
+    <div class="card" id="noteCard">
+      <h2 class="h3">Daily note</h2>
+      <div class="note-date">
+        <div class="field">
+          <label class="tag" for="noteDate">Pick a date</label>
+          <input class="in" type="date" id="noteDate">
+        </div>
+        <button class="linkbtn" id="noteToday" type="button">Back to today</button>
+      </div>
+      <div class="note-day" id="noteDay" aria-live="polite"></div>
+      <textarea class="in" id="noteText" rows="3" placeholder="How did the day go? A line or two is enough (+5 XP)"></textarea>
+      <div class="earlier" id="earlier" hidden></div>
+    </div>
   </section>
 
   <section class="sec" id="monthView" hidden>
@@ -547,13 +639,77 @@ details.forgot p { margin: 8px 0 0; }
   </section>
 
   <div class="tip" id="tipFoot" hidden>Daily Seeds is free. If it helps you, <a id="tipLink" href="#" target="_blank" rel="noopener noreferrer">buy me a coffee</a>.</div>
+
+  <div class="tip ver" id="verFoot"><button class="linkbtn" id="verBtn" type="button" aria-expanded="false" aria-controls="versionPanel">Version <span id="verNum"></span> &middot; What&rsquo;s new</button></div>
+  <div class="tip" id="footLinks"><button class="linkbtn" id="contactBtn" type="button" aria-expanded="false" aria-controls="contactPanel">Contact</button></div>
+
+  <div class="sec page-panel" id="versionPanel" hidden>
+    <button class="back" id="closeVersion" type="button"><span aria-hidden="true">&#8249;</span> Back</button>
+    <h2 class="page-title">What&rsquo;s new</h2>
+    <div class="card">
+      <div class="tag">Current version</div>
+      <div class="ch-title" id="verCurrent"></div>
+      <p class="sub">Version numbers read major.minor.fix. The first number goes up for a big update, the middle one for new features, and the last one for bug and glitch fixes.</p>
+    </div>
+    <div class="card" id="verList"></div>
+  </div>
+
+  <div class="sec page-panel" id="contactPanel" hidden>
+    <button class="back" id="closeContact" type="button"><span aria-hidden="true">&#8249;</span> Back</button>
+    <h2 class="page-title">Contact</h2>
+    <div class="card">
+      <p class="sub">Questions, ideas or a bug to report? Get in touch.</p>
+      <div class="contacts" id="contactList"></div>
+      <p class="fine">For a bug report, say what you tapped, what you expected, what happened, and which phone or browser you use.</p>
+    </div>
+  </div>
 </div>
 
 <script>
+/* Version numbers read major.minor.fix. The first number goes up for a big update, the middle one for new features,
+   and the last one for bug and glitch fixes. Update APP_VERSION and add a CHANGELOG entry with every release. */
+var APP_VERSION = "1.8.1";
+var CHANGELOG = [
+  { v: "1.8.1", d: "12 Nov 2026", k: "fix", n: ["Add habit now works everywhere, including viewers that block forms. Log in, sign up and challenge setup got the same fix.", "A red message now shows if something breaks, so it can be reported."] },
+  { v: "1.8.0", d: "12 Nov 2026", k: "minor", n: ["12 levels, then endless stars after Evergreen.", "Only 12 habit check-ins a day earn XP.", "Pre-written habit ideas let you pick a colour before adding.", "A confirmation shows when a habit is added."] },
+  { v: "1.7.0", d: "11 Nov 2026", k: "minor", n: ["Pick any date for a daily note.", "New Levels screen with every level, its name and the top level."] },
+  { v: "1.6.0", d: "11 Nov 2026", k: "minor", n: ["The app starts blank so you add your own habits.", "Manage habits: select several or all and remove them.", "A Contact page at the bottom, ready for when contact details are added."] },
+  { v: "1.5.0", d: "10 Nov 2026", k: "minor", n: ["Opening animation.", "Log in, sign up, or continue as a guest.", "Each account keeps its own habits."] },
+  { v: "1.4.0", d: "9 Nov 2026", k: "minor", n: ["Export your data to Google Sheets or Excel.", "Back button on the Themes and Export screens."] },
+  { v: "1.3.0", d: "9 Nov 2026", k: "minor", n: ["Theme Pack with five colour themes.", "Fixes for lost XP and lost challenges when removing a habit."] },
+  { v: "1.2.0", d: "9 Nov 2026", k: "minor", n: ["XP and levels.", "Guided 30-day challenge with setup questions.", "Daily notes and a stats page."] },
+  { v: "1.1.0", d: "9 Nov 2026", k: "minor", n: ["Month view.", "Light and dark mode.", "Best streak."] },
+  { v: "1.0.0", d: "9 Nov 2026", k: "major", n: ["First release: a weekly habit tracker with streaks and a progress ring."] }
+];
+
+/* Some viewers (including embedded frames) block real form submission, which makes a submit button do nothing.
+   So a tap on a form's submit button raises the form's submit event by hand, and the page never depends on the browser's own submit. */
+function wireSubmit(form) {
+  if (!form) return;
+  form.addEventListener("click", function (e) {
+    var b = e.target.closest('button[type="submit"], button:not([type]), input[type="submit"]');
+    if (!b || b.form !== form) return;
+    e.preventDefault();
+    form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+  });
+}
+function showProblem(msg) {
+  var el = document.getElementById("problem");
+  if (!el || !msg || /^Script error/.test(msg)) return;
+  el.textContent = "Something went wrong: " + msg + " Tell the app owner what you tapped just before this.";
+  el.hidden = false;
+}
+window.addEventListener("error", function (e) { showProblem(e.message); });
+window.addEventListener("unhandledrejection", function (e) { showProblem(e.reason && e.reason.message ? e.reason.message : String(e.reason)); });
+
 function startApp(KEY) {
   var THEME_KEY = "daily-seeds-theme";
   // Paste your Ko-fi, Buy Me a Coffee or payment page link between the quotes to show the tip line.
   var TIP_URL = "";
+  // Your contact details. Fill in any you want people to see. Empty ones are hidden.
+  // email: you@example.com   whatsapp: country code and number, like 919876543210   instagram: your handle, like dailyseeds
+  var CONTACT = { email: "", whatsapp: "", instagram: "" };
+  var IDEAS = ["Drink water", "Read 10 pages", "Walk 20 minutes", "Stretch", "Meditate", "Write in a journal"];
   // Theme Pack switches. While THEME_PACK_LOCKED is false every theme is open to everyone.
   // Set it to true when you start selling the pack, and paste the page where people buy it into PACK_URL.
   var THEME_PACK_LOCKED = false;
@@ -574,9 +730,20 @@ function startApp(KEY) {
   var VIEWS = ["week", "month", "challenge", "stats"];
 
   var LEVELS = [
-    { n: "Seed", xp: 0 }, { n: "Sprout", xp: 100 }, { n: "Sapling", xp: 300 },
-    { n: "Young tree", xp: 700 }, { n: "Tree", xp: 1300 }, { n: "Grove", xp: 2200 }, { n: "Forest", xp: 3500 }
+    { n: "Seed", xp: 0 }, { n: "Sprout", xp: 100 }, { n: "Seedling", xp: 250 }, { n: "Sapling", xp: 500 },
+    { n: "Young tree", xp: 900 }, { n: "Tree", xp: 1400 }, { n: "Grove", xp: 2100 }, { n: "Orchard", xp: 3000 },
+    { n: "Woodland", xp: 4200 }, { n: "Forest", xp: 5600 }, { n: "Ancient forest", xp: 7500 }, { n: "Evergreen", xp: 10000 }
   ];
+  var STAR_XP = 1000;        // after the top level, every 1,000 XP adds a star, with no limit
+  var DAILY_CHECK_CAP = 12;  // only this many habit check-ins per day earn XP
+  function levelInfo(xp) {
+    var li = 0;
+    for (var i = 0; i < LEVELS.length; i++) if (xp >= LEVELS[i].xp) li = i;
+    var info = { index: li, cur: LEVELS[li], next: LEVELS[li + 1] || null, stars: 0, starFloor: 0 };
+    if (!info.next) { info.stars = Math.floor((xp - LEVELS[li].xp) / STAR_XP); info.starFloor = LEVELS[li].xp + info.stars * STAR_XP; }
+    return info;
+  }
+  function levelLabel(info) { return info.cur.n + (info.stars ? " ★ " + info.stars : ""); }
 
   var SETUP = [
     { id: "habit", label: "Which habit do you want to build?", ph: "e.g. Walk 20 minutes", type: "text" },
@@ -637,6 +804,10 @@ function startApp(KEY) {
   var monthHabit = "all";
   var confirmId = null;
   var endConfirm = false;
+  function reduceMotion() { return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches); }
+  var manage = false;
+  var selected = {};
+  var removeSelConfirm = false;
   var challengeSetup = false;
   var challengeSel = null;
   var challengeDraft = {};
@@ -678,19 +849,8 @@ function startApp(KEY) {
     return best;
   }
 
-  function seed() {
-    var t = startOfDay(new Date());
-    function mk(id, name, c, offsets) {
-      var done = {};
-      offsets.forEach(function (o) { done[key(addDays(t, -o))] = true; });
-      return { id: id, name: name, c: c, done: done, sample: true };
-    }
-    return { habits: [
-      mk("s1", "Drink 2 litres of water", 3, [0, 1, 2, 4]),
-      mk("s2", "Read 20 pages", 2, [1, 2, 3]),
-      mk("s3", "Walk 30 minutes", 1, [0, 2])
-    ], notes: {}, challenge: null, past: [] };
-  }
+  // New accounts start empty so people plant their own habits.
+  function seed() { return { habits: [], notes: {}, challenge: null, past: [] }; }
   function load() {
     try {
       var raw = localStorage.getItem(KEY);
@@ -725,9 +885,19 @@ function startApp(KEY) {
   function reflectedCount(c) {
     return Object.keys(c.reflections || {}).filter(function (n) { return nonEmpty(c.reflections[n]); }).length;
   }
+  // 10 XP per habit check-in, but only the first DAILY_CHECK_CAP check-ins on any one day count.
+  function checkXP(habits) {
+    var perDay = {};
+    habits.forEach(function (h) {
+      Object.keys(h.done).forEach(function (k) { if (h.done[k]) perDay[k] = (perDay[k] || 0) + 1; });
+    });
+    var xp = 0;
+    Object.keys(perDay).forEach(function (k) { xp += 10 * Math.min(perDay[k], DAILY_CHECK_CAP); });
+    return xp;
+  }
   function totalXP(today) {
     var xp = state.banked || 0;
-    state.habits.forEach(function (h) { xp += 10 * countDone(h); });
+    xp += checkXP(state.habits);
     Object.keys(state.notes).forEach(function (k) { if (nonEmpty(state.notes[k])) xp += 5; });
     if (state.challenge) {
       xp += 15 * reflectedCount(state.challenge);
@@ -740,25 +910,34 @@ function startApp(KEY) {
     });
     return xp;
   }
+  var lastStars = null;
   function renderLevel(today) {
     var xp = totalXP(today);
-    var li = 0;
-    for (var i = 0; i < LEVELS.length; i++) if (xp >= LEVELS[i].xp) li = i;
-    var cur = LEVELS[li], next = LEVELS[li + 1];
-    document.getElementById("levelName").textContent = "Level " + (li + 1) + " · " + cur.n;
-    document.getElementById("levelXp").textContent = next ? xp + " / " + next.xp + " XP" : xp + " XP";
-    var pct = next ? Math.round(((xp - cur.xp) / (next.xp - cur.xp)) * 100) : 100;
+    var info = levelInfo(xp);
+    var li = info.index, cur = info.cur, next = info.next;
+    var top = LEVELS[LEVELS.length - 1];
+    var goal = next ? next.xp : info.starFloor + STAR_XP;
+    var base = next ? cur.xp : info.starFloor;
+    document.getElementById("levelName").textContent = "Level " + (li + 1) + " · " + levelLabel(info);
+    document.getElementById("levelXp").textContent = xp + " / " + goal + " XP";
+    var pct = Math.max(0, Math.min(100, Math.round(((xp - base) / (goal - base)) * 100)));
     document.getElementById("xpFill").style.width = pct + "%";
     document.getElementById("xpTrack").setAttribute("aria-valuenow", String(pct));
-    document.getElementById("levelSub").textContent = next ? (next.xp - xp) + " XP to " + next.n + ". A check-in is 10 XP." : "You reached the top level.";
-    if (lastLevel !== null && li > lastLevel) {
+    var sub = next
+      ? (next.xp - xp) + " XP to " + next.n + ". Top level: " + top.n + " (Level " + LEVELS.length + ")."
+      : (goal - xp) + " XP to your next star. You are at the top level, " + top.n + ".";
+    var checksToday = state.habits.filter(function (h) { return h.done[key(today)]; }).length;
+    if (checksToday >= DAILY_CHECK_CAP) sub += " Check-in XP is maxed for today.";
+    document.getElementById("levelSub").textContent = sub;
+    if (lastLevel !== null && (li > lastLevel || info.stars > lastStars)) {
       var up = document.getElementById("levelUp");
-      up.textContent = "Level up. You are now a " + cur.n + ".";
+      up.textContent = li > lastLevel ? "Level up. You are now a " + cur.n + "." : "New star. " + levelLabel(info) + ".";
       up.hidden = false;
       clearTimeout(levelTimer);
       levelTimer = setTimeout(function () { up.hidden = true; }, 4500);
     }
     lastLevel = li;
+    lastStars = info.stars;
   }
 
   /* ---------- Render ---------- */
@@ -801,8 +980,10 @@ function startApp(KEY) {
     document.getElementById("sampleNote").hidden = !state.habits.some(function (h) { return h.sample; });
     updateNoteMeta(today);
 
+    updateManage();
     if (!total) {
-      elHabits.innerHTML = '<li class="empty">No habits yet. Name one below and tick it off each day.</li>';
+      elHabits.innerHTML = '<li class="empty"><b>Plant your first habit</b>Name something small you can do every day, or start from an idea.' +
+        '<div class="ideas">' + IDEAS.map(function (t) { return '<button type="button" class="pick" data-idea="' + esc(t) + '">' + esc(t) + '</button>'; }).join("") + '</div></li>';
       return;
     }
 
@@ -823,12 +1004,13 @@ function startApp(KEY) {
       var streak = streakOf(h, today);
       var sure = confirmId === h.id;
       var isChallenge = state.challenge && state.challenge.habitId === h.id;
-      return '<li class="habit" data-c="' + h.c + '">' +
-        '<div class="habit-top"><h3 class="habit-name">' + esc(h.name) + '</h3>' +
+      var box = manage ? '<input type="checkbox" class="selbox" data-sel="' + esc(h.id) + '"' + (selected[h.id] ? " checked" : "") + ' aria-label="Select ' + esc(h.name) + '">' : "";
+      return '<li class="habit' + (manage && selected[h.id] ? " picked" : "") + '" data-id="' + esc(h.id) + '" data-c="' + h.c + '">' +
+        '<div class="habit-top"><div class="pick-name">' + box + '<h3 class="habit-name">' + esc(h.name) + '</h3></div>' +
         '<div class="chips">' + (isChallenge ? '<span class="chip">challenge</span>' : '') + '<span class="chip streak">' + streak + ' day streak</span><span class="chip">best ' + bestStreakOf(h) + '</span></div></div>' +
         '<div class="days">' + days + '</div>' +
         '<div class="habit-foot"><span>' + weekCount + ' of 7 this week</span>' +
-        '<button type="button" class="remove' + (sure ? " sure" : "") + '" data-act="remove" data-id="' + esc(h.id) + '">' + (sure ? (isChallenge ? "Tap again to remove and end challenge" : "Tap again to remove") : "Remove") + '</button></div>' +
+        (manage ? "" : '<button type="button" class="remove' + (sure ? " sure" : "") + '" data-act="remove" data-id="' + esc(h.id) + '">' + (sure ? (isChallenge ? "Tap again to remove and end challenge" : "Tap again to remove") : "Remove") + '</button>') + '</div>' +
         '</li>';
     }).join("");
   }
@@ -841,8 +1023,11 @@ function startApp(KEY) {
   }
   function updateNoteMeta(today) {
     var isToday = key(noteDate) === key(today);
-    document.getElementById("noteLabel").textContent = isToday ? "Today" : fmtDate(noteDate);
-    document.getElementById("nextNote").disabled = noteDate >= today;
+    var inp = document.getElementById("noteDate");
+    inp.max = key(today);
+    if (inp.value !== key(noteDate)) inp.value = key(noteDate);
+    document.getElementById("noteDay").textContent = DAYS_LONG[(noteDate.getDay() + 6) % 7] + ", " + noteDate.getDate() + " " + MONTHS_LONG[noteDate.getMonth()] + " " + noteDate.getFullYear() + (isToday ? " · Today" : "");
+    document.getElementById("noteToday").hidden = isToday;
     renderEarlier();
   }
   function renderEarlier() {
@@ -865,10 +1050,18 @@ function startApp(KEY) {
     clearTimeout(noteTimer);
     noteTimer = setTimeout(renderEarlier, 700);
   });
-  document.getElementById("prevNote").addEventListener("click", function () { noteDate = addDays(noteDate, -1); showNote(); });
-  document.getElementById("nextNote").addEventListener("click", function () {
+  document.getElementById("noteDate").addEventListener("change", function (e) {
     var today = startOfDay(new Date());
-    if (noteDate < today) { noteDate = addDays(noteDate, 1); showNote(); }
+    var v = e.target.value;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) {
+      var d = parseKey(v);
+      noteDate = d > today ? today : d;
+    }
+    showNote();
+  });
+  document.getElementById("noteToday").addEventListener("click", function () {
+    noteDate = startOfDay(new Date());
+    showNote();
   });
   document.getElementById("earlier").addEventListener("click", function (e) {
     var b = e.target.closest("[data-note]");
@@ -1061,6 +1254,12 @@ function startApp(KEY) {
   }
 
   chBody.addEventListener("click", function (e) {
+    var sb = e.target.closest('button[type="submit"]');
+    if (sb && sb.form) {
+      e.preventDefault();
+      sb.form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+      return;
+    }
     var dot = e.target.closest("button[data-day]");
     if (dot) {
       challengeSel = parseInt(dot.getAttribute("data-day"), 10);
@@ -1212,7 +1411,88 @@ function startApp(KEY) {
   }
 
   /* ---------- Events ---------- */
+  /* ---------- Remove and manage habits ---------- */
+  // Keeps the XP earned from a removed habit, and keeps its challenge in the history.
+  function removeHabits(ids) {
+    var own = function (h) { return !h.sample; };
+    var before = checkXP(state.habits.filter(own));
+    ids.forEach(function (id) {
+      var h = habitById(id);
+      if (!h) return;
+      if (state.challenge && state.challenge.habitId === id) archiveChallenge(true);
+      state.habits = state.habits.filter(function (x) { return x.id !== id; });
+      delete selected[id];
+    });
+    // Bank exactly the XP these habits had earned, including the daily limit.
+    state.banked = (state.banked || 0) + (before - checkXP(state.habits.filter(own)));
+    save();
+  }
+  function selectedIds() { return state.habits.filter(function (h) { return selected[h.id]; }).map(function (h) { return h.id; }); }
+  function updateManage() {
+    var total = state.habits.length;
+    if (!total) { manage = false; selected = {}; removeSelConfirm = false; }
+    document.getElementById("manageBar").hidden = view !== "week" || !total;
+    document.getElementById("manageTools").hidden = !manage;
+    var mb = document.getElementById("manageBtn");
+    mb.setAttribute("aria-pressed", manage ? "true" : "false");
+    mb.hidden = manage;
+    var n = selectedIds().length;
+    var rs = document.getElementById("removeSel");
+    rs.disabled = n === 0;
+    rs.classList.toggle("sure", removeSelConfirm && n > 0);
+    rs.textContent = removeSelConfirm && n > 0 ? "Tap again to remove " + n : "Remove selected (" + n + ")";
+    var sa = document.getElementById("selectAll");
+    sa.checked = total > 0 && n === total;
+    sa.indeterminate = n > 0 && n < total;
+  }
+  function setManage(on) { manage = on; selected = {}; removeSelConfirm = false; confirmId = null; render(); }
+  document.getElementById("manageBtn").addEventListener("click", function () { setManage(true); });
+  document.getElementById("manageDone").addEventListener("click", function () { setManage(false); });
+  document.getElementById("selectAll").addEventListener("change", function (e) {
+    selected = {};
+    if (e.target.checked) state.habits.forEach(function (h) { selected[h.id] = true; });
+    removeSelConfirm = false;
+    render();
+  });
+  document.getElementById("removeSel").addEventListener("click", function () {
+    var ids = selectedIds();
+    if (!ids.length) return;
+    if (!removeSelConfirm) { removeSelConfirm = true; updateManage(); return; }
+    removeSelConfirm = false;
+    removeHabits(ids);
+    selected = {};
+    render();
+  });
+  document.getElementById("removeSamples").addEventListener("click", function () {
+    removeHabits(state.habits.filter(function (h) { return h.sample; }).map(function (h) { return h.id; }));
+    render();
+  });
+  elHabits.addEventListener("change", function (e) {
+    var cb = e.target.closest("input[data-sel]");
+    if (!cb) return;
+    var id = cb.getAttribute("data-sel");
+    if (cb.checked) selected[id] = true; else delete selected[id];
+    removeSelConfirm = false;
+    var li = cb.closest(".habit");
+    if (li) li.classList.toggle("picked", cb.checked);
+    updateManage();
+  });
+
   elHabits.addEventListener("click", function (e) {
+    var idea = e.target.closest("button[data-idea]");
+    if (idea) {
+      // An idea fills the name box so you can choose a colour, then tap Add habit.
+      var ni = document.getElementById("newName");
+      ni.value = idea.getAttribute("data-idea");
+      document.getElementById("addErr").hidden = true;
+      var st0 = document.getElementById("addStatus");
+      st0.className = "status";
+      st0.textContent = "“" + ni.value + "” is ready. Pick a colour if you like, then tap Add habit.";
+      var ab = document.getElementById("addBtn");
+      ab.classList.remove("attn"); void ab.offsetWidth; ab.classList.add("attn");
+      try { document.getElementById("addForm").scrollIntoView({ block: "center", behavior: reduceMotion() ? "auto" : "smooth" }); } catch (x) {}
+      return;
+    }
     var btn = e.target.closest("button[data-act]");
     if (!btn) return;
     var id = btn.getAttribute("data-id");
@@ -1224,18 +1504,14 @@ function startApp(KEY) {
       if (h.done[k]) delete h.done[k]; else h.done[k] = true;
       save(); render();
     } else {
-      if (confirmId === id) {
-        // Keep the XP earned from a removed habit, and keep its challenge in the history.
-        if (state.challenge && state.challenge.habitId === id) archiveChallenge(true);
-        if (!h.sample) state.banked = (state.banked || 0) + 10 * countDone(h);
-        state.habits = state.habits.filter(function (x) { return x.id !== id; });
-        confirmId = null; save();
-      } else { confirmId = id; }
+      if (confirmId === id) { removeHabits([id]); confirmId = null; }
+      else { confirmId = id; }
       render();
     }
   });
 
   document.addEventListener("click", function (e) {
+    if (removeSelConfirm && !e.target.closest("#removeSel")) { removeSelConfirm = false; updateManage(); }
     // Cancel a pending "tap again" without rebuilding the page, so a text box you are typing in keeps focus.
     if (confirmId && !e.target.closest("[data-act='remove']")) {
       confirmId = null;
@@ -1278,16 +1554,37 @@ function startApp(KEY) {
     save(); render();
   });
 
+  // Adds a habit, then makes it obvious that it worked: the new card pulses, scrolls into view, and a message appears under the form.
+  var addStatusTimer = null;
+  function addHabitNamed(name, color) {
+    var id = newId();
+    state.habits.push({ id: id, name: name, c: color, done: {} });
+    save();
+    render();
+    var li = elHabits.querySelector('[data-id="' + id + '"]');
+    if (li) {
+      li.classList.add("fresh");
+      try { li.scrollIntoView({ block: "nearest", behavior: reduceMotion() ? "auto" : "smooth" }); } catch (x) {}
+    }
+    var st = document.getElementById("addStatus");
+    st.className = "status ok";
+    st.textContent = "Added “" + name + "”. You can find it in your list above.";
+    clearTimeout(addStatusTimer);
+    addStatusTimer = setTimeout(function () { st.textContent = ""; st.className = "status"; }, 4500);
+  }
   document.getElementById("addForm").addEventListener("submit", function (e) {
     e.preventDefault();
     var input = document.getElementById("newName");
     var name = input.value.trim();
-    if (!name) { input.focus(); return; }
+    var err = document.getElementById("addErr");
+    if (!name) { err.hidden = false; input.focus(); return; }
+    err.hidden = true;
     var c = parseInt((document.querySelector("input[name='color']:checked") || { value: "1" }).value, 10);
-    state.habits.push({ id: newId(), name: name, c: c, done: {} });
     input.value = "";
-    save(); render();
+    addHabitNamed(name, c);
   });
+  document.getElementById("newName").addEventListener("input", function () { document.getElementById("addErr").hidden = true; });
+  wireSubmit(document.getElementById("addForm"));
 
   /* ---------- Theme and tip line ---------- */
   var root = document.documentElement;
@@ -1348,18 +1645,30 @@ function startApp(KEY) {
     else root.removeAttribute("data-palette");
   } catch (e) {}
   var wrapEl = document.getElementById("wrap");
+  var contactPanel = document.getElementById("contactPanel");
+  var levelsPanel = document.getElementById("levelsPanel");
+  var versionPanel = document.getElementById("versionPanel");
   var exportPanel = document.getElementById("exportPanel");
   var exportBtn = document.getElementById("exportBtn");
   function openPage(name) {
     panel.hidden = name !== "themes";
     exportPanel.hidden = name !== "export";
+    contactPanel.hidden = name !== "contact";
+    levelsPanel.hidden = name !== "levels";
+    versionPanel.hidden = name !== "version";
     if (name) wrapEl.setAttribute("data-page", name); else wrapEl.removeAttribute("data-page");
     paletteBtn.setAttribute("aria-expanded", name === "themes" ? "true" : "false");
     exportBtn.setAttribute("aria-expanded", name === "export" ? "true" : "false");
     if (name === "themes") { renderThemes(); defaultThemeNote(); }
     if (name === "export") { renderExport(); }
+    if (name === "contact") { renderContact(); }
+    if (name === "levels") { renderLevels(); }
+    if (name === "version") { renderVersion(); }
+    document.getElementById("verBtn").setAttribute("aria-expanded", name === "version" ? "true" : "false");
+    document.getElementById("levelsBtn").setAttribute("aria-expanded", name === "levels" ? "true" : "false");
+    document.getElementById("contactBtn").setAttribute("aria-expanded", name === "contact" ? "true" : "false");
     window.scrollTo(0, 0);
-    var focusTarget = name === "themes" ? document.getElementById("closeThemes") : name === "export" ? document.getElementById("closeExport") : null;
+    var focusTarget = name === "themes" ? document.getElementById("closeThemes") : name === "export" ? document.getElementById("closeExport") : name === "contact" ? document.getElementById("closeContact") : name === "levels" ? document.getElementById("closeLevels") : name === "version" ? document.getElementById("closeVersion") : null;
     if (focusTarget) focusTarget.focus();
   }
   paletteBtn.addEventListener("click", function () { openPage("themes"); });
@@ -1367,12 +1676,83 @@ function startApp(KEY) {
   document.getElementById("closeThemes").addEventListener("click", function () { openPage(null); paletteBtn.focus(); });
   document.getElementById("closeExport").addEventListener("click", function () { openPage(null); exportBtn.focus(); });
 
+  /* ---------- Contact (kept at the very bottom of the page) ---------- */
+  function hasContact() { return !!(CONTACT.email || CONTACT.whatsapp || CONTACT.instagram); }
+  function renderContact() {
+    var rows = [];
+    var email = (CONTACT.email || "").trim();
+    var handle = (CONTACT.instagram || "").replace(/^@/, "").replace(/[^A-Za-z0-9._]/g, "");
+    var wa = (CONTACT.whatsapp || "").replace(/\D/g, "");
+    if (email) rows.push({ label: "Email", value: email, href: "mailto:" + email, go: "Write an email", copy: email });
+    if (handle) rows.push({ label: "Instagram", value: "@" + handle, href: "https://instagram.com/" + handle, go: "Open profile" });
+    if (wa) rows.push({ label: "WhatsApp", value: "+" + wa, href: "https://wa.me/" + wa, go: "Open chat", copy: "+" + wa });
+    document.getElementById("contactList").innerHTML = rows.map(function (r, i) {
+      return '<div class="contact-row"><div><div class="tag">' + r.label + '</div><div class="contact-val">' + esc(r.value) + '</div></div>' +
+        '<div class="btns"><a class="ghost" href="' + esc(r.href) + '" target="_blank" rel="noopener noreferrer">' + r.go + '</a>' +
+        (r.copy ? '<button type="button" class="ghost" data-copy="' + esc(r.copy) + '">Copy</button>' : "") + '</div></div>';
+    }).join("");
+  }
+  /* ---------- Levels screen ---------- */
+  var XP_RULES = [
+    ["Tick a habit for a day", "+10 XP"],
+    ["Habit check-ins that earn XP each day, at most", "12"],
+    ["Write a daily note", "+5 XP"],
+    ["Reflect on a challenge day", "+15 XP"],
+    ["Finish a 30-day challenge with 21 or more days done", "+100 XP"]
+  ];
+  function renderLevels() {
+    var today = startOfDay(new Date());
+    var xp = totalXP(today);
+    var info = levelInfo(xp), li = info.index;
+    var top = LEVELS[LEVELS.length - 1];
+    document.getElementById("levelsIntro").textContent =
+      "You are Level " + (li + 1) + ", " + levelLabel(info) + ", with " + xp + " XP. There are " + LEVELS.length + " levels. The top level is Level " + LEVELS.length + ", " + top.n + ", at " + top.xp + " XP. After that, every " + STAR_XP + " XP adds a star, with no limit.";
+    document.getElementById("levelList").innerHTML = LEVELS.map(function (l, idx) {
+      var cls = "lv" + (idx < li ? " done" : "") + (idx === li ? " cur" : "") + (idx === LEVELS.length - 1 ? " top" : "");
+      var status = idx < li ? "Reached" : idx === li ? "You are here" + (info.stars ? " ★ " + info.stars : "") : (l.xp - xp) + " XP to go";
+      return '<li class="' + cls + '"><span class="lv-n">' + (idx + 1) + '</span><div class="lv-main"><b>' + esc(l.n) + '</b><span>' + l.xp + ' XP</span></div><span class="lv-st">' + status + '</span></li>';
+    }).join("") +
+      '<li class="lv endless"><span class="lv-n">★</span><div class="lv-main"><b>Stars</b><span>every ' + STAR_XP + ' XP after ' + top.xp + '</span></div><span class="lv-st">No limit</span></li>';
+    document.getElementById("xpRules").innerHTML = XP_RULES.map(function (r) {
+      return '<div class="xp-rule"><span>' + r[0] + '</span><b>' + r[1] + '</b></div>';
+    }).join("");
+  }
+  document.getElementById("levelsBtn").addEventListener("click", function () { openPage("levels"); });
+  document.getElementById("closeLevels").addEventListener("click", function () { openPage(null); document.getElementById("levelsBtn").focus(); });
+  /* ---------- Version and what's new ---------- */
+  function renderVersion() {
+    document.getElementById("verCurrent").textContent = "Version " + APP_VERSION;
+    document.getElementById("verList").innerHTML = CHANGELOG.map(function (r) {
+      var kind = r.k === "fix" ? "Fix" : r.k === "major" ? "Major" : "Minor";
+      return '<div class="rel"><div class="rel-head"><b>' + esc(r.v) + '</b><span class="rel-kind ' + r.k + '">' + kind + '</span><span class="rel-date">' + esc(r.d) + '</span></div><ul>' +
+        r.n.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul></div>";
+    }).join("");
+  }
+  document.getElementById("verNum").textContent = APP_VERSION;
+  document.getElementById("verBtn").addEventListener("click", function () { openPage("version"); });
+  document.getElementById("closeVersion").addEventListener("click", function () { openPage(null); document.getElementById("verBtn").focus(); });
+  document.getElementById("footLinks").hidden = !hasContact();
+  document.getElementById("contactBtn").addEventListener("click", function () { openPage("contact"); });
+  document.getElementById("closeContact").addEventListener("click", function () { openPage(null); document.getElementById("contactBtn").focus(); });
+  document.getElementById("contactList").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-copy]");
+    if (!b) return;
+    var text = b.getAttribute("data-copy");
+    function ok() { b.textContent = "Copied"; setTimeout(function () { b.textContent = "Copy"; }, 1500); }
+    function manual() {
+      var val = b.closest(".contact-row").querySelector(".contact-val");
+      try { var r = document.createRange(); r.selectNodeContents(val); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); } catch (x) {}
+      b.textContent = "Press Ctrl+C";
+      setTimeout(function () { b.textContent = "Copy"; }, 2500);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, manual); else manual();
+  });
+
   /* ---------- Spreadsheet export ---------- */
   var exportSel = "checkins";
   function levelNameFor(xp) {
-    var li = 0;
-    for (var i = 0; i < LEVELS.length; i++) if (xp >= LEVELS[i].xp) li = i;
-    return "Level " + (li + 1) + " " + LEVELS[li].n;
+    var info = levelInfo(xp);
+    return "Level " + (info.index + 1) + " " + levelLabel(info);
   }
   function cellText(v) {
     v = v == null ? "" : String(v);
@@ -1507,6 +1887,9 @@ function startApp(KEY) {
   var wrap = document.getElementById("wrap");
   var loginForm = document.getElementById("loginForm");
   var signupForm = document.getElementById("signupForm");
+  wireSubmit(loginForm);
+  wireSubmit(signupForm);
+  document.getElementById("authVersion").textContent = "Version " + APP_VERSION;
 
   // Use the saved look on this screen too.
   try {
