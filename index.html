@@ -77,11 +77,44 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(30px, 
 .xpbar { height: 8px; border-radius: 999px; background: var(--line); overflow: hidden; }
 .xpbar i { display: block; height: 100%; background: var(--accent); border-radius: 999px; transition: width .4s ease; }
 .level-sub { font-size: 13px; color: var(--muted); }
+.level { flex-direction: row; align-items: stretch; gap: 14px; }
+.level-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.streak-big { flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding-left: 14px; border-left: 1px solid var(--line); min-width: 76px; }
+.streak-big b { font-family: var(--font-display); font-weight: 700; font-size: 38px; line-height: 1; color: var(--accent); }
+.streak-big span { font-size: 12px; color: var(--muted); margin-top: 4px; }
 .levelup { font-weight: 600; color: var(--accent); font-size: 14px; }
 
 .tabs { display: inline-flex; align-self: flex-start; max-width: 100%; overflow-x: auto; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 3px; gap: 2px; }
 .tab { border: 0; background: none; padding: 7px 14px; border-radius: 999px; cursor: pointer; font-weight: 600; color: var(--muted); white-space: nowrap; }
-.tab[aria-selected="true"] { background: var(--accent); color: var(--on-c); }
+.tab[aria-selected="true"], .tab[aria-pressed="true"] { background: var(--accent); color: var(--on-c); }
+.seg { margin-bottom: 4px; }
+.trail { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.trail li { position: relative; }
+.trail li:not(:last-child)::after { content: ""; position: absolute; left: 15px; top: 40px; bottom: -8px; width: 2px; background: var(--line); }
+.trail li.is-done:not(:last-child)::after { background: var(--accent); }
+.node { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; background: none; border: 0; padding: 8px 0; cursor: pointer; color: var(--ink); font: inherit; }
+.node:disabled { cursor: default; }
+.node .mk { flex: none; width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-content: center; font-family: var(--font-num); font-size: 13px; color: var(--muted); background: var(--surface); position: relative; z-index: 1; }
+.node.done .mk { background: var(--accent); border-color: var(--accent); color: var(--on-c); }
+.node.today .mk { border-color: var(--accent); color: var(--accent); }
+.node.sel .mk { outline: 2px solid var(--ink); outline-offset: 2px; }
+.node.locked { opacity: .55; }
+.node .nt { display: flex; flex-direction: column; min-width: 0; }
+.node .nt b { font-weight: 600; }
+.node .nt small { color: var(--muted); font-size: 12px; }
+.node.sel .nt b { color: var(--accent); }
+.opts { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.opt { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 12px; padding: 12px 14px; font: inherit; cursor: pointer; }
+.opt:disabled { cursor: default; }
+.opt.correct, .opt.picked { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.opt.wrong { border-color: var(--c4); box-shadow: inset 0 0 0 1px var(--c4); }
+.opt-tag { flex: none; font-family: var(--font-num); font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.fb { margin: 10px 0 0; font-size: 14px; }
+.fb:focus { outline: none; }
+.fb.good { color: var(--accent); font-weight: 600; }
+.fb.bad { color: var(--c4); font-weight: 600; }
+.lesson-idea { margin: 6px 0 0; line-height: 1.5; }
+.fine-note { font-size: 12px; color: var(--muted); margin: 0; }
 
 .sec { display: flex; flex-direction: column; gap: 20px; }
 .weekbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
@@ -542,6 +575,7 @@ a.ghost { display: inline-block; text-decoration: none; color: inherit; text-ali
   <div class="note" id="saveWarn" hidden>Your browser is blocking saving, so your habits will be lost when you close this page.</div>
 
   <div class="level" id="levelCard">
+   <div class="level-main">
     <div class="level-top">
       <span class="level-name" id="levelName"></span>
       <span class="level-xp" id="levelXp"></span>
@@ -552,6 +586,8 @@ a.ghost { display: inline-block; text-decoration: none; color: inherit; text-ali
       <button class="linkbtn" id="levelsBtn" type="button" aria-expanded="false" aria-controls="levelsPanel">All levels</button>
     </div>
     <div class="levelup" id="levelUp" aria-live="polite" hidden></div>
+   </div>
+   <div class="streak-big" id="streakBox"><b id="streakNum">0</b><span id="streakLbl">day streak</span></div>
   </div>
 
   <div class="tabs" id="tabs" role="tablist" aria-label="View">
@@ -668,8 +704,10 @@ a.ghost { display: inline-block; text-decoration: none; color: inherit; text-ali
 <script>
 /* Version numbers read major.minor.fix. The first number goes up for a big update, the middle one for new features,
    and the last one for bug and glitch fixes. Update APP_VERSION and add a CHANGELOG entry with every release. */
-var APP_VERSION = "1.8.1";
+var APP_VERSION = "2.0.1";
 var CHANGELOG = [
+  { v: "2.0.1", d: "13 Nov 2026", k: "fix", n: ["The app moves to the new day by itself if it stays open past midnight, so the next lesson unlocks without a refresh.", "Fixed a crash in the lessons if the device clock was set back.", "After day 7, the first lesson you have not done is opened, not the last one."] },
+  { v: "2.0.0", d: "12 Nov 2026", k: "major", n: ["New Lessons path: Better sleep, a 7-day course with one short idea and one question a day.", "A trail of days shows what is done, today and locked.", "A big day-streak number now sits next to your level.", "The 30-day challenge is now called Build your own."] },
   { v: "1.8.1", d: "12 Nov 2026", k: "fix", n: ["Add habit now works everywhere, including viewers that block forms. Log in, sign up and challenge setup got the same fix.", "A red message now shows if something breaks, so it can be reported."] },
   { v: "1.8.0", d: "12 Nov 2026", k: "minor", n: ["12 levels, then endless stars after Evergreen.", "Only 12 habit check-ins a day earn XP.", "Pre-written habit ideas let you pick a colour before adding.", "A confirmation shows when a habit is added."] },
   { v: "1.7.0", d: "11 Nov 2026", k: "minor", n: ["Pick any date for a daily note.", "New Levels screen with every level, its name and the top level."] },
@@ -850,7 +888,7 @@ function startApp(KEY) {
   }
 
   // New accounts start empty so people plant their own habits.
-  function seed() { return { habits: [], notes: {}, challenge: null, past: [] }; }
+  function seed() { return { habits: [], notes: {}, challenge: null, past: [], path: null, pathPast: [] }; }
   function load() {
     try {
       var raw = localStorage.getItem(KEY);
@@ -860,6 +898,8 @@ function startApp(KEY) {
           if (!p.notes || typeof p.notes !== "object") p.notes = {};
           if (!Array.isArray(p.past)) p.past = [];
           if (!p.challenge) p.challenge = null;
+          if (!p.path) p.path = null;
+          if (!Array.isArray(p.pathPast)) p.pathPast = [];
           return p;
         }
       }
@@ -895,6 +935,22 @@ function startApp(KEY) {
     Object.keys(perDay).forEach(function (k) { xp += 10 * Math.min(perDay[k], DAILY_CHECK_CAP); });
     return xp;
   }
+  function pathDoneCount(p) { return p && p.done ? Object.keys(p.done).length : 0; }
+  function pathXP() {
+    var xp = 0;
+    if (state.path) { var n = pathDoneCount(state.path); xp += 15 * n; if (n >= PATH.lessons.length) xp += 50; }
+    (state.pathPast || []).forEach(function (q) { xp += 15 * (q.lessons || 0) + (q.completed ? 50 : 0); });
+    return xp;
+  }
+  // Days in a row, ending today or yesterday, with at least one habit ticked.
+  function dayStreak(today) {
+    var any = function (d) { var k = key(d); return state.habits.some(function (h) { return h.done[k]; }); };
+    var d = today;
+    if (!any(d)) d = addDays(d, -1);
+    var n = 0;
+    while (any(d) && n < 3650) { n++; d = addDays(d, -1); }
+    return n;
+  }
   function totalXP(today) {
     var xp = state.banked || 0;
     xp += checkXP(state.habits);
@@ -904,6 +960,7 @@ function startApp(KEY) {
       var info = challengeInfo(state.challenge, today);
       if (info.ended && info.done >= 21) xp += 100;
     }
+    xp += pathXP();
     state.past.forEach(function (p) {
       xp += 15 * (p.reflected || 0);
       if (p.completed) xp += 100;
@@ -918,6 +975,10 @@ function startApp(KEY) {
     var top = LEVELS[LEVELS.length - 1];
     var goal = next ? next.xp : info.starFloor + STAR_XP;
     var base = next ? cur.xp : info.starFloor;
+    var st = dayStreak(today);
+    document.getElementById("streakNum").textContent = String(st);
+    document.getElementById("streakLbl").textContent = st === 1 ? "day streak" : "day streak";
+    document.getElementById("streakBox").setAttribute("aria-label", "Current streak: " + st + (st === 1 ? " day" : " days"));
     document.getElementById("levelName").textContent = "Level " + (li + 1) + " · " + levelLabel(info);
     document.getElementById("levelXp").textContent = xp + " / " + goal + " XP";
     var pct = Math.max(0, Math.min(100, Math.round(((xp - base) / (goal - base)) * 100)));
@@ -1131,7 +1192,7 @@ function startApp(KEY) {
 
   function introHtml() {
     var html = '<div class="card">' +
-      '<div class="tag">Free challenge · 30 days</div>' +
+      '<div class="tag">Build your own · 30 days</div>' +
       '<h2 class="ch-title">' + esc(PACK.title) + '</h2>' +
       '<p class="sub">' + esc(PACK.aim) + '</p>' +
       '<ul class="how"><li>Answer six short questions to set your aim and your plan.</li><li>Each day you get one small task and one question to reflect on.</li><li>Checking in earns 10 XP. Each reflection earns 15 more.</li></ul>' +
@@ -1227,12 +1288,215 @@ function startApp(KEY) {
     return html;
   }
 
-  function renderChallenge(today) {
-    var c = state.challenge;
-    if (!c) { chBody.innerHTML = challengeSetup ? setupHtml() : introHtml(); return; }
-    var info = challengeInfo(c, today);
-    chBody.innerHTML = info.ended ? recapHtml(c, info) : activeHtml(c, info);
+  /* ---------- Lessons path ---------- */
+  // Each lesson has one idea and one question. Quiz lessons have a right answer (c). Pick lessons (c: -1) have none and save your choice.
+  var PATH = {
+    id: "sleep",
+    title: "Better sleep",
+    aim: "Seven short lessons, one a day, to help you fall asleep more easily and wake up better.",
+    habit: "Better sleep",
+    lessons: [
+      { t: "Morning light", idea: "Your body clock runs on light. Bright light soon after you wake tells your brain it is daytime, which helps you feel sleepy at the right time tonight. Ten minutes outside is enough, and a cloudy sky is still brighter than indoors.",
+        q: "Which habit helps you fall asleep more easily tonight?", c: 0,
+        o: [["Spend 10 minutes in daylight soon after waking", "Yes. Morning daylight anchors your body clock."], ["Stay in a dim room until noon", "A dim morning leaves your body clock without its main daytime signal."], ["Scroll in bed to relax", "Bright screens late at night push your body clock later and keep your mind switched on."]] },
+      { t: "Same wake-up time", idea: "A steady wake-up time is the strongest anchor for your sleep schedule. Big lie-ins on days off move your clock later, so Monday feels like jet lag. Aim to wake within about an hour of the same time every day.",
+        q: "Which matters most for a steady sleep schedule?", c: 0,
+        o: [["Waking up at about the same time every day", "Yes. A fixed wake-up time keeps the rest of the schedule in place."], ["Sleeping as long as possible, whenever you go to bed", "A moving schedule is exactly what confuses your body clock."], ["Sleeping in for two extra hours on days off", "Big lie-ins shift your clock later, so Sunday night gets harder."]] },
+      { t: "Caffeine", idea: "Caffeine takes about 5 to 6 hours to drop by half, and some people clear it more slowly. A coffee or strong tea at 4pm can still be half active at 10pm, even if you feel fine falling asleep. It can make your sleep lighter.",
+        q: "You drink a coffee at 4pm. How much caffeine is roughly still in your body at 10pm?", c: 0,
+        o: [["About half", "Yes. That is why many people sleep better with a cut-off around midday or early afternoon."], ["None, it is all gone", "It takes hours to clear. Most of it is still there."], ["All of it", "Your body clears some, and about half has gone after 6 hours."]] },
+      { t: "Wind down", idea: "Your brain needs a gentle runway to sleep. A 20 to 30 minute routine that is the same each night becomes a signal that sleep is coming. Keep the lights low and avoid anything that makes your mind race, like work or the news.",
+        q: "Which wind-down will you try tonight?", c: -1, plan: "Your wind-down",
+        o: [["Read a paper book", "A calm story gives your mind somewhere gentle to go."], ["Gentle stretching", "Slow movement helps your body let go of the day."], ["Write tomorrow's to-do list", "Getting worries onto paper helps them stay out of your head."], ["Dim lights and quiet music", "Low light tells your body the day is over."]] },
+      { t: "Your bedroom", idea: "Sleep comes easier in a room that is cool, dark and quiet. Your body temperature drops as you fall asleep, and a hot room works against that. Around 16 to 19°C is ideal, but cooler than usual is the goal, and a fan helps. Cover bright lights and keep your phone out of reach.",
+        q: "Which bedroom is best for sleep?", c: 0,
+        o: [["As cool and dark as you can make it", "Yes. Cool, dark and quiet is the best setup."], ["Warm and bright", "Heat and light are two of the most common reasons for restless nights."], ["The room makes no difference", "It does. Your surroundings change how easily you fall and stay asleep."]] },
+      { t: "Cannot sleep?", idea: "Lying awake and frustrated teaches your brain that bed is a place for worrying. If you are still awake after about 20 minutes, get up, keep the lights dim and do something calm until you feel sleepy. Then go back to bed.",
+        q: "You have been awake in bed for a long time. What helps most?", c: 0,
+        o: [["Get up and do something calm in dim light", "Yes. It breaks the link between your bed and feeling awake."], ["Check your phone to pass the time", "Bright screens wake you up more."], ["Stay put and try harder to fall asleep", "Trying hard creates stress, which keeps you awake."]] },
+      { t: "Keep one change", idea: "Seven days is enough to feel a difference, but only the changes you keep will matter. Do not try to keep everything. Choose the one that felt easiest and most useful, and let it become automatic before you add another.",
+        q: "Which change will you keep after today?", c: -1, plan: "The change you will keep",
+        o: [["Morning daylight", "Small and kept beats big and dropped."], ["Same wake-up time", "Small and kept beats big and dropped."], ["A caffeine cut-off", "Small and kept beats big and dropped."], ["A nightly wind-down", "Small and kept beats big and dropped."], ["A cooler, darker bedroom", "Small and kept beats big and dropped."]] }
+    ]
+  };
+  var chMode = state.challenge ? "own" : "path";
+  var pathSel = null;
+  var pathTry = null;          // { day, idx } after a wrong answer
+  var pathGoalDraft = "";
+  var pathEndConfirm = false;
+  var PATH_N = PATH.lessons.length;
+
+  // How many lessons are open: day 1 is always open, even if the device clock moved back, and never more than 7.
+  function pathToday(p, today) { return Math.max(1, daysBetween(parseKey(p.start), today) + 1); }
+  function pathDate(p, day) { return addDays(parseKey(p.start), day - 1); }
+  function pathDefaultSel(p, today) {
+    var open = Math.min(PATH_N, pathToday(p, today));
+    // Today's lesson first. After day 7 there is no "today", so start with the earliest lesson not done.
+    if (pathToday(p, today) <= PATH_N && !p.done[open]) return open;
+    for (var i = 1; i <= open; i++) if (!p.done[i]) return i;
+    return PATH_N;
   }
+  function pathCurrentSel(p, today) {
+    var open = Math.min(PATH_N, pathToday(p, today));
+    if (!pathSel || pathSel < 1 || pathSel > open) pathSel = pathDefaultSel(p, today);
+    return pathSel;
+  }
+
+  function modeToggleHtml() {
+    return '<div class="tabs seg" role="group" aria-label="Challenge type">' +
+      '<button class="tab" type="button" data-chmode="path" aria-pressed="' + (chMode === "path") + '">Lessons</button>' +
+      '<button class="tab" type="button" data-chmode="own" aria-pressed="' + (chMode === "own") + '">Build your own</button></div>';
+  }
+
+  function pathIntroHtml() {
+    var html = '<form class="card" id="pathForm">' +
+      '<div class="tag">Lessons · 7 days · free</div>' +
+      '<h2 class="ch-title">' + esc(PATH.title) + '</h2>' +
+      '<p class="sub">' + esc(PATH.aim) + '</p>' +
+      '<ul class="how"><li>One short idea and one question a day, about two minutes.</li><li>Each lesson you finish earns 15 XP and ticks your Better sleep habit for that day (+10 XP).</li><li>Finish all seven for a 50 XP bonus.</li></ul>' +
+      '<div class="field"><label class="lbl" for="p-goal">What is your sleep goal?</label>' +
+      '<input class="in" type="text" id="p-goal" data-pgoal="1" maxlength="60" placeholder="e.g. Be asleep by 11pm" value="' + esc(pathGoalDraft) + '" autocomplete="off"></div>' +
+      '<div class="btns"><button class="primary" type="submit">Start day 1 today</button></div>' +
+      '<p class="fine-note">General wellbeing tips, not medical advice. If sleep problems last for weeks, talk to a doctor.</p>' +
+      '</form>';
+    if ((state.pathPast || []).length) {
+      html += '<div class="card"><h3 class="h3">Finished lessons</h3>' + state.pathPast.slice().reverse().map(function (q) {
+        return '<div class="past"><span>' + esc(q.title) + (q.completed ? " · completed" : "") + '</span><span>' + q.lessons + '/' + PATH_N + '</span></div>';
+      }).join("") + '</div>';
+    }
+    return html;
+  }
+
+  function trailHtml(p, today, sel) {
+    var n = pathToday(p, today);
+    return '<ol class="trail">' + PATH.lessons.map(function (L, idx) {
+      var d = idx + 1, done = !!p.done[d], locked = d > n;
+      var cls = "node" + (done ? " done" : "") + (d === n ? " today" : "") + (locked ? " locked" : "") + (d === sel ? " sel" : "");
+      var state_ = done ? "done" : locked ? "locked" : d === n ? "today" : "open";
+      var sub = done ? "Done" : locked ? "Unlocks " + fmtDate(pathDate(p, d)) : d === n ? "Today" : "Catch up";
+      return '<li class="' + (done ? "is-done" : "") + '"><button type="button" class="' + cls + '" data-pday="' + d + '"' + (locked ? " disabled" : "") +
+        ' aria-label="Day ' + d + ", " + esc(L.t) + ", " + state_ + '"' + (d === sel ? ' aria-current="step"' : "") + '>' +
+        '<span class="mk" aria-hidden="true">' + (done ? "&#10003;" : d) + '</span>' +
+        '<span class="nt"><b>' + esc(L.t) + '</b><small>' + esc(sub) + '</small></span></button></li>';
+    }).join("") + '</ol>';
+  }
+
+  function lessonHtml(p, s) {
+    var L = PATH.lessons[s - 1];
+    var rec = p.done[s];
+    var tryIdx = pathTry && pathTry.day === s ? pathTry.idx : -1;
+    var pick = L.c === -1;
+    var opts = L.o.map(function (o, i) {
+      var cls = "opt", tag = "";
+      if (rec) {
+        if (pick && rec.pick === i) { cls += " picked"; tag = "Your pick"; }
+        if (!pick && i === L.c) { cls += " correct"; tag = "Correct"; }
+      } else if (i === tryIdx) { cls += " wrong"; tag = "Not quite"; }
+      return '<button type="button" class="' + cls + '" data-popt="' + i + '"' + (rec ? " disabled" : "") + '><span>' + esc(o[0]) + '</span>' + (tag ? '<span class="opt-tag">' + tag + '</span>' : "") + '</button>';
+    }).join("");
+    var fb = "";
+    if (rec) {
+      var why = pick ? L.o[rec.pick][1] : L.o[L.c][1];
+      fb = '<p class="fb good" id="pathFb" tabindex="-1" role="status">' + (pick ? "Saved. " : "Correct. ") + esc(why) + ' Lesson complete, +15 XP.</p>';
+    } else if (tryIdx >= 0) {
+      fb = '<p class="fb bad" id="pathFb" tabindex="-1" role="status">Not quite. ' + esc(L.o[tryIdx][1]) + ' Try another answer.</p>';
+    }
+    return '<div class="card">' +
+      '<div class="tag">Day ' + s + ' · ' + fmtDate(pathDate(p, s)) + '</div>' +
+      '<h3 class="task">' + esc(L.t) + '</h3>' +
+      '<p class="lesson-idea">' + esc(L.idea) + '</p>' +
+      '<div class="lbl" style="margin-top:14px" id="pq">' + esc(L.q) + '</div>' +
+      '<div class="opts" role="group" aria-labelledby="pq">' + opts + '</div>' + fb +
+      '</div>';
+  }
+
+  function pathPlanHtml(p) {
+    var rows = '<div class="plan-item"><span class="tag">Your goal</span><p>' + esc(p.goal) + '</p></div>';
+    PATH.lessons.forEach(function (L, i) {
+      var rec = p.done[i + 1];
+      if (L.c === -1 && rec) rows += '<div class="plan-item"><span class="tag">' + esc(L.plan) + '</span><p>' + esc(L.o[rec.pick][0]) + '</p></div>';
+    });
+    return rows;
+  }
+
+  function pathActiveHtml(p, today) {
+    var sel = pathCurrentSel(p, today);
+    var count = pathDoneCount(p);
+    var all = count >= PATH_N;
+    var h = habitById(p.habitId);
+    var html = "";
+    if (all) {
+      html += '<div class="card"><div class="tag">Lessons finished</div><h2 class="ch-title">You finished ' + esc(PATH.title) + '.</h2>' +
+        '<div class="tiles three"><div class="tile"><b>' + count + '/' + PATH_N + '</b><span>lessons</span></div><div class="tile"><b>' + (15 * count + 50) + '</b><span>XP earned</span></div><div class="tile"><b>' + (h ? streakOf(h, today) : 0) + '</b><span>habit streak</span></div></div>' +
+        '<p class="sub">That is 50 bonus XP for finishing all seven. Here is your plan.</p>' + pathPlanHtml(p) +
+        '<div class="btns"><button class="primary" type="button" data-pth="archive">Save and start again</button></div></div>';
+    }
+    html += '<div class="card"><div class="ch-head"><div><div class="tag">' + esc(PATH.title) + '</div><h2 class="ch-title">' + (all ? "Review the lessons" : "Day " + Math.min(PATH_N, pathToday(p, today)) + " of " + PATH_N) + '</h2></div><div class="ch-count">' + count + ' of ' + PATH_N + ' done</div></div>' +
+      '<div class="sub">Goal: <b>' + esc(p.goal) + '</b></div>' + trailHtml(p, today, sel) + '</div>';
+    html += lessonHtml(p, sel);
+    if (!all) html += '<details class="card"><summary>Your plan so far</summary>' + pathPlanHtml(p) + '</details>';
+    html += '<p class="fine-note">General wellbeing tips, not medical advice. If sleep problems last for weeks, talk to a doctor.</p>';
+    if (!all) html += '<div class="row-end"><button type="button" class="remove' + (pathEndConfirm ? " sure" : "") + '" data-pth="end">' + (pathEndConfirm ? "Tap again to end lessons" : "End lessons") + '</button></div>';
+    return html;
+  }
+
+  function renderChallenge(today) {
+    var body;
+    if (chMode === "path") {
+      body = state.path ? pathActiveHtml(state.path, today) : pathIntroHtml();
+    } else {
+      var c = state.challenge;
+      if (!c) body = challengeSetup ? setupHtml() : introHtml();
+      else { var info = challengeInfo(c, today); body = info.ended ? recapHtml(c, info) : activeHtml(c, info); }
+    }
+    chBody.innerHTML = modeToggleHtml() + body;
+  }
+
+  function startPath() {
+    var today = startOfDay(new Date());
+    var h = state.habits.filter(function (x) { return x.name.toLowerCase() === PATH.habit.toLowerCase(); })[0];
+    if (!h) { h = { id: newId(), name: PATH.habit, c: (state.habits.length % 5) + 1, done: {} }; state.habits.push(h); }
+    state.path = { id: PATH.id, title: PATH.title, start: key(today), goal: (pathGoalDraft || "").trim() || "Sleep better", habitId: h.id, done: {} };
+    pathGoalDraft = ""; pathSel = null; pathTry = null; pathEndConfirm = false;
+    save(); render();
+  }
+  function archivePath(silent) {
+    var p = state.path;
+    if (!p) return;
+    var n = pathDoneCount(p);
+    state.pathPast.push({ title: p.title, goal: p.goal, start: p.start, lessons: n, completed: n >= PATH_N });
+    state.path = null; pathSel = null; pathTry = null; pathEndConfirm = false;
+    save();
+    if (!silent) render();
+  }
+  function answerLesson(day, idx) {
+    var p = state.path;
+    if (!p || p.done[day]) return;
+    var today = startOfDay(new Date());
+    if (day < 1 || day > Math.min(PATH_N, pathToday(p, today))) return;
+    var L = PATH.lessons[day - 1];
+    if (L.c !== -1 && idx !== L.c) { pathTry = { day: day, idx: idx }; render(); focusFb(); return; }
+    p.done[day] = { pick: idx };
+    pathTry = null;
+    var h = habitById(p.habitId);
+    if (h) h.done[key(pathDate(p, day))] = true;
+    save(); render(); focusFb();
+  }
+  function focusFb() { var f = document.getElementById("pathFb"); if (f) f.focus(); }
+  function pathClick(b) {
+    var today = startOfDay(new Date());
+    if (!b.hasAttribute("data-pth")) pathEndConfirm = false;
+    if (b.hasAttribute("data-chmode")) { chMode = b.getAttribute("data-chmode"); render(); return; }
+    if (b.hasAttribute("data-pday")) { pathSel = parseInt(b.getAttribute("data-pday"), 10); pathTry = null; render(); return; }
+    if (b.hasAttribute("data-popt")) {
+      if (state.path) answerLesson(pathCurrentSel(state.path, today), parseInt(b.getAttribute("data-popt"), 10));
+      return;
+    }
+    var act = b.getAttribute("data-pth");
+    if (act === "end") { if (pathEndConfirm) archivePath(); else { pathEndConfirm = true; render(); } }
+    else if (act === "archive") archivePath();
+  }
+
 
   function archiveChallenge(silent) {
     var c = state.challenge;
@@ -1260,6 +1524,8 @@ function startApp(KEY) {
       sb.form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
       return;
     }
+    var pb = e.target.closest("button[data-chmode], button[data-pday], button[data-popt], button[data-pth]");
+    if (pb) { pathClick(pb); return; }
     var dot = e.target.closest("button[data-day]");
     if (dot) {
       challengeSel = parseInt(dot.getAttribute("data-day"), 10);
@@ -1293,6 +1559,7 @@ function startApp(KEY) {
 
   chBody.addEventListener("input", function (e) {
     var t = e.target;
+    if (t.hasAttribute("data-pgoal")) { pathGoalDraft = t.value; return; }
     if (t.hasAttribute("data-draft")) {
       var id = t.getAttribute("data-draft");
       challengeDraft[id] = t.value;
@@ -1314,6 +1581,7 @@ function startApp(KEY) {
 
   chBody.addEventListener("submit", function (e) {
     e.preventDefault();
+    if (e.target && e.target.id === "pathForm") { startPath(); return; }
     var today = startOfDay(new Date());
     var name = (challengeDraft.habit || "").trim();
     if (!name) {
@@ -1420,6 +1688,7 @@ function startApp(KEY) {
       var h = habitById(id);
       if (!h) return;
       if (state.challenge && state.challenge.habitId === id) archiveChallenge(true);
+      if (state.path && state.path.habitId === id) archivePath(true);
       state.habits = state.habits.filter(function (x) { return x.id !== id; });
       delete selected[id];
     });
@@ -1698,7 +1967,9 @@ function startApp(KEY) {
     ["Habit check-ins that earn XP each day, at most", "12"],
     ["Write a daily note", "+5 XP"],
     ["Reflect on a challenge day", "+15 XP"],
-    ["Finish a 30-day challenge with 21 or more days done", "+100 XP"]
+    ["Finish a 30-day challenge with 21 or more days done", "+100 XP"],
+    ["Complete a lesson in the Better sleep path", "+15 XP"],
+    ["Finish all 7 lessons", "+50 XP"]
   ];
   function renderLevels() {
     var today = startOfDay(new Date());
@@ -1868,6 +2139,20 @@ function startApp(KEY) {
 
   showNote();
   render();
+
+  // If the page stays open past midnight, move to the new day (lessons unlock, "today" moves).
+  var shownDay = key(startOfDay(new Date()));
+  function dayCheck() {
+    var now = startOfDay(new Date());
+    if (key(now) === shownDay) return;
+    var followNote = key(noteDate) === shownDay;
+    shownDay = key(now);
+    if (followNote) { noteDate = now; showNote(); }
+    render();
+  }
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) dayCheck(); });
+  window.addEventListener("focus", dayCheck);
+  setInterval(dayCheck, 60000);
 }
 </script>
 <script>
