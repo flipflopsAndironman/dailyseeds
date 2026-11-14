@@ -704,8 +704,9 @@ a.ghost { display: inline-block; text-decoration: none; color: inherit; text-ali
 <script>
 /* Version numbers read major.minor.fix. The first number goes up for a big update, the middle one for new features,
    and the last one for bug and glitch fixes. Update APP_VERSION and add a CHANGELOG entry with every release. */
-var APP_VERSION = "2.0.1";
+var APP_VERSION = "2.0.2";
 var CHANGELOG = [
+  { v: "2.0.2", d: "14 Nov 2026", k: "fix", n: ["Picking a date for a daily note now lets you type a full year and two-digit days. Before, the box reset after one digit."] },
   { v: "2.0.1", d: "13 Nov 2026", k: "fix", n: ["The app moves to the new day by itself if it stays open past midnight, so the next lesson unlocks without a refresh.", "Fixed a crash in the lessons if the device clock was set back.", "After day 7, the first lesson you have not done is opened, not the last one."] },
   { v: "2.0.0", d: "12 Nov 2026", k: "major", n: ["New Lessons path: Better sleep, a 7-day course with one short idea and one question a day.", "A trail of days shows what is done, today and locked.", "A big day-streak number now sits next to your level.", "The 30-day challenge is now called Build your own."] },
   { v: "1.8.1", d: "12 Nov 2026", k: "fix", n: ["Add habit now works everywhere, including viewers that block forms. Log in, sign up and challenge setup got the same fix.", "A red message now shows if something breaks, so it can be reported."] },
@@ -1085,8 +1086,11 @@ function startApp(KEY) {
   function updateNoteMeta(today) {
     var isToday = key(noteDate) === key(today);
     var inp = document.getElementById("noteDate");
-    inp.max = key(today);
-    if (inp.value !== key(noteDate)) inp.value = key(noteDate);
+    // Only touch these when they change: setting them again resets what is being typed in the box.
+    if (inp.getAttribute("max") !== key(today)) inp.max = key(today);
+    if (inp.getAttribute("min") !== "2000-01-01") inp.min = "2000-01-01";
+    // Never rewrite the box while someone is typing in it, or digits get wiped as they type.
+    if (inp.value !== key(noteDate) && document.activeElement !== inp) inp.value = key(noteDate);
     document.getElementById("noteDay").textContent = DAYS_LONG[(noteDate.getDay() + 6) % 7] + ", " + noteDate.getDate() + " " + MONTHS_LONG[noteDate.getMonth()] + " " + noteDate.getFullYear() + (isToday ? " · Today" : "");
     document.getElementById("noteToday").hidden = isToday;
     renderEarlier();
@@ -1111,23 +1115,34 @@ function startApp(KEY) {
     clearTimeout(noteTimer);
     noteTimer = setTimeout(renderEarlier, 700);
   });
-  document.getElementById("noteDate").addEventListener("change", function (e) {
+  function onNoteDate(e) {
     var today = startOfDay(new Date());
     var v = e.target.value;
-    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) {
-      var d = parseKey(v);
-      noteDate = d > today ? today : d;
-    }
+    // Typing a year passes through 0002, 0020, 0202 on the way to 2026. Wait for a real year before changing the note.
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(v) || +v.slice(0, 4) < 2000) return;
+    var d = parseKey(v);
+    if (d > today) return; // a future date is ignored while typing, and snaps to today when you leave the box
+    noteDate = d;
     showNote();
+  }
+  document.getElementById("noteDate").addEventListener("change", onNoteDate);
+  document.getElementById("noteDate").addEventListener("input", onNoteDate);
+  document.getElementById("noteDate").addEventListener("blur", function () {
+    var inp = document.getElementById("noteDate"), today = startOfDay(new Date());
+    // A future date snaps to today. A half-typed or empty box shows the date the note is really for.
+    if (/^\d{4}-\d{2}-\d{2}$/.test(inp.value) && +inp.value.slice(0, 4) >= 2000 && parseKey(inp.value) > today) { noteDate = today; showNote(); }
+    inp.value = key(noteDate);
   });
   document.getElementById("noteToday").addEventListener("click", function () {
     noteDate = startOfDay(new Date());
+    document.getElementById("noteDate").value = key(noteDate);
     showNote();
   });
   document.getElementById("earlier").addEventListener("click", function (e) {
     var b = e.target.closest("[data-note]");
     if (!b) return;
     noteDate = parseKey(b.getAttribute("data-note"));
+    document.getElementById("noteDate").value = key(noteDate);
     showNote();
   });
 
